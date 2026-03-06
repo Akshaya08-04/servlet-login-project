@@ -14,7 +14,12 @@
 <br><br>
 
 <h3>UC3 - Valid Name Rule</h3>
-<p>Login now checks whether the username starts with a capital letter and has at least 3 characters.</p>
+<p>Name must start with a capital letter and have at least 3 characters.</p>
+
+<br>
+
+<h3>UC4 - Valid Password Rule</h3>
+<p>Password must have minimum 8 characters, at least 1 uppercase letter, at least 1 number, and exactly 1 special character.</p>
 
 </body>
 </html>
