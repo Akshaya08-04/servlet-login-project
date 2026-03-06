@@ -20,12 +20,26 @@ import javax.servlet.http.HttpServletResponse;
 )
 public class LoginServlet extends HttpServlet {
 
+    private boolean isValidName(String name) {
+        return name != null && name.matches("^[A-Z][a-zA-Z]{2,}$");
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String user = request.getParameter("user");
         String pwd = request.getParameter("pwd");
+
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        if (!isValidName(user)) {
+            out.println("<font color='red'>Invalid Name. Name must start with a capital letter and contain at least 3 characters.</font><br><br>");
+            RequestDispatcher rd = request.getRequestDispatcher("login.html");
+            rd.include(request, response);
+            return;
+        }
 
         String validUser = getServletConfig().getInitParameter("user");
         String validPassword = getServletConfig().getInitParameter("password");
@@ -35,8 +49,6 @@ public class LoginServlet extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("LoginSuccess.jsp");
             rd.forward(request, response);
         } else {
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
             out.println("<font color='red'>Invalid Username or Password</font><br><br>");
             RequestDispatcher rd = request.getRequestDispatcher("login.html");
             rd.include(request, response);
