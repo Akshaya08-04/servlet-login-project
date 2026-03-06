@@ -15,13 +15,36 @@ import javax.servlet.http.HttpServletResponse;
         urlPatterns = {"/LoginServlet"},
         initParams = {
                 @WebInitParam(name = "user", value = "Akshaya"),
-                @WebInitParam(name = "password", value = "aks@2004")
+                @WebInitParam(name = "password", value = "Akshaya@2004")
         }
 )
 public class LoginServlet extends HttpServlet {
 
     private boolean isValidName(String name) {
         return name != null && name.matches("^[A-Z][a-zA-Z]{2,}$");
+    }
+
+    private boolean isValidPassword(String password) {
+        if (password == null || password.length() < 8) {
+            return false;
+        }
+
+        if (!password.matches(".*[A-Z].*")) {
+            return false;
+        }
+
+        if (!password.matches(".*\\d.*")) {
+            return false;
+        }
+
+        int specialCount = 0;
+        for (char ch : password.toCharArray()) {
+            if (!Character.isLetterOrDigit(ch)) {
+                specialCount++;
+            }
+        }
+
+        return specialCount == 1;
     }
 
     @Override
@@ -36,6 +59,13 @@ public class LoginServlet extends HttpServlet {
 
         if (!isValidName(user)) {
             out.println("<font color='red'>Invalid Name. Name must start with a capital letter and contain at least 3 characters.</font><br><br>");
+            RequestDispatcher rd = request.getRequestDispatcher("login.html");
+            rd.include(request, response);
+            return;
+        }
+
+        if (!isValidPassword(pwd)) {
+            out.println("<font color='red'>Invalid Password. Password must have minimum 8 characters, at least 1 uppercase letter, at least 1 number, and exactly 1 special character.</font><br><br>");
             RequestDispatcher rd = request.getRequestDispatcher("login.html");
             rd.include(request, response);
             return;
